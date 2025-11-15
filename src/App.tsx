@@ -1,6 +1,10 @@
-import React from 'react'
+import { useState } from 'react'
+import { componentRegistry } from './library/registry'
+import ComponentViewer from './components/ComponentViewer'
 
 function App() {
+  const [selectedComponent, setSelectedComponent] = useState<string | null>(null)
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -44,23 +48,29 @@ function App() {
           </div>
         </div>
 
-        {/* Placeholder for Components Gallery */}
+        {/* Components Gallery */}
         <div id="components" className="mt-20">
           <h3 className="text-3xl font-bold text-center text-gray-900 mb-10">Component Gallery</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {/* Placeholder cards */}
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <h4 className="text-xl font-semibold mb-2">Cards</h4>
-              <p className="text-gray-600">Beautiful card components for displaying content.</p>
-            </div>
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <h4 className="text-xl font-semibold mb-2">Modals</h4>
-              <p className="text-gray-600">Interactive modal dialogs for user interactions.</p>
-            </div>
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <h4 className="text-xl font-semibold mb-2">Animations</h4>
-              <p className="text-gray-600">Smooth animations powered by Framer Motion and more.</p>
-            </div>
+            {componentRegistry.map((component) => (
+              <div key={component.name} className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
+                <h4 className="text-xl font-semibold mb-2">{component.name}</h4>
+                <p className="text-gray-600 mb-4">{component.description}</p>
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {component.tags.map((tag) => (
+                    <span key={tag} className="bg-gray-100 text-gray-800 text-xs px-2 py-1 rounded">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+                <button
+                  onClick={() => setSelectedComponent(component.name)}
+                  className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded transition-colors"
+                >
+                  View Component
+                </button>
+              </div>
+            ))}
           </div>
         </div>
       </main>
@@ -73,6 +83,12 @@ function App() {
           </div>
         </div>
       </footer>
+
+      {/* Component Viewer Modal */}
+      <ComponentViewer
+        componentName={selectedComponent}
+        onClose={() => setSelectedComponent(null)}
+      />
     </div>
   )
 }

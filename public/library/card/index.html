@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Card Component Demo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-8">
+    <h1 class="text-3xl font-bold text-center mb-8">Project Card Component</h1>
+
+    <div class="max-w-sm mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
+        <div class="h-48 bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center">
+            <svg class="w-16 h-16 text-white" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path>
+            </svg>
+        </div>
+        <div class="p-6">
+            <h2 class="text-xl font-bold text-gray-900 mb-2">Project Title</h2>
+            <p class="text-gray-600 mb-4">This is a sample project card that showcases the component's design and functionality. It includes an image placeholder, title, description, and action buttons.</p>
+            <div class="flex flex-wrap gap-2 mb-4">
+                <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">React</span>
+                <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">TypeScript</span>
+                <span class="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded">Tailwind</span>
+            </div>
+            <div class="flex space-x-2">
+                <button class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded transition-colors">
+                    View Project
+                </button>
+                <button class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded transition-colors">
+                    GitHub
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-8 text-center text-gray-600">
+        <p>This card component is perfect for showcasing projects, products, or any content with visual appeal.</p>
+    </div>
+</body>
+</html>

@@ -1,4 +1,4 @@
-import React, { Suspense, lazy } from 'react';
+import React from 'react';
 
 interface ComponentViewerProps {
   componentName: string | null;
@@ -8,12 +8,9 @@ interface ComponentViewerProps {
 const ComponentViewer: React.FC<ComponentViewerProps> = ({ componentName, onClose }) => {
   if (!componentName) return null;
 
-  // Lazy load the component
-  const LazyComponent = lazy(() => import(`../library/${componentName}`));
-
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg p-6 max-w-4xl w-full mx-4 max-h-96 overflow-auto">
+      <div className="bg-white rounded-lg p-6 max-w-6xl w-full mx-4 max-h-[90vh] overflow-hidden">
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-xl font-semibold">{componentName} Component</h3>
           <button
@@ -23,11 +20,15 @@ const ComponentViewer: React.FC<ComponentViewerProps> = ({ componentName, onClos
             ×
           </button>
         </div>
-        <Suspense fallback={<div className="text-center py-8">Loading component...</div>}>
-          <LazyComponent />
-        </Suspense>
+        <div className="w-full h-96">
+          <iframe
+            src={`/library/${componentName}/index.html`}
+            className="w-full h-full border rounded"
+            title={`${componentName} Demo`}
+          />
+        </div>
         <div className="mt-4 text-sm text-gray-600">
-          <p>This component is loaded dynamically to keep the bundle size small.</p>
+          <p>This component demo runs in an isolated iframe for safety and compatibility.</p>
         </div>
       </div>
     </div>

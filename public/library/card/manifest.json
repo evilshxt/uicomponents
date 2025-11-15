@@ -1,0 +1,9 @@
+{
+  "name": "card",
+  "category": "Layout",
+  "description": "A versatile project card component with image, title, description, and action buttons.",
+  "tags": ["card", "project", "layout", "content"],
+  "author": "Velvron Team",
+  "languages": ["html", "css", "js"],
+  "dependencies": []
+}

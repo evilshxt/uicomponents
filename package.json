@@ -4,10 +4,11 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
+    "dev": "npm run generate-components && vite",
+    "build": "npm run generate-components && tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "generate-components": "node scripts/generate-components-list.js"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.17",

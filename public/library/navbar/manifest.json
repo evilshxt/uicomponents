@@ -1,0 +1,9 @@
+{
+  "name": "navbar",
+  "category": "Navigation",
+  "description": "Responsive navigation bar with dropdown menus and mobile support.",
+  "tags": ["navbar", "navigation", "responsive", "menu"],
+  "author": "Velvron Team",
+  "languages": ["html", "css", "js"],
+  "dependencies": []
+}

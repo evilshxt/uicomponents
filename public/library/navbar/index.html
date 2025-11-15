@@ -7,55 +7,130 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .mobile-menu {
-            display: none;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
         }
         .mobile-menu.open {
-            display: block;
+            max-height: 500px;
         }
     </style>
 </head>
-<body class="bg-gray-100">
-    <nav class="bg-white shadow-lg">
-        <div class="max-w-7xl mx-auto px-4">
-            <div class="flex justify-between">
-                <div class="flex space-x-7">
-                    <div>
-                        <a href="#" class="flex items-center py-4 px-2">
-                            <span class="font-semibold text-gray-500 text-lg">Velvron</span>
-                        </a>
+<body class="bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 min-h-screen">
+    <!-- Premium Navbar -->
+    <nav class="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-slate-950/40 border-b border-slate-800/40">
+        <div class="mx-6 lg:mx-12 px-6 lg:px-8 mt-4 mb-4 rounded-2xl bg-gradient-to-r from-slate-900/60 to-slate-800/40 border border-slate-700/40 transition-all duration-300 hover:border-slate-700/60">
+            <div class="flex justify-between items-center py-4">
+                <!-- Logo -->
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center font-bold text-slate-950 shadow-lg shadow-cyan-500/50">
+                        V
                     </div>
-                    <div class="hidden md:flex items-center space-x-1">
-                        <a href="#" class="py-4 px-2 text-gray-500 font-semibold hover:text-green-500 transition duration-300">Home</a>
-                        <a href="#" class="py-4 px-2 text-gray-500 font-semibold hover:text-green-500 transition duration-300">About</a>
-                        <a href="#" class="py-4 px-2 text-gray-500 font-semibold hover:text-green-500 transition duration-300">Services</a>
-                        <a href="#" class="py-4 px-2 text-gray-500 font-semibold hover:text-green-500 transition duration-300">Contact</a>
-                    </div>
+                    <h1 class="text-xl font-black bg-gradient-to-r from-cyan-400 via-blue-400 to-cyan-400 bg-clip-text text-transparent">
+                        Velvron
+                    </h1>
                 </div>
+
+                <!-- Desktop Navigation -->
+                <div class="hidden md:flex items-center space-x-1">
+                    <a href="#" class="text-slate-400 hover:text-cyan-400 transition-colors text-sm font-medium px-4 py-2 rounded-lg hover:bg-slate-800/50">Home</a>
+                    <a href="#" class="text-slate-400 hover:text-cyan-400 transition-colors text-sm font-medium px-4 py-2 rounded-lg hover:bg-slate-800/50">Components</a>
+                    <a href="#" class="text-slate-400 hover:text-cyan-400 transition-colors text-sm font-medium px-4 py-2 rounded-lg hover:bg-slate-800/50">Docs</a>
+                    <a href="#" class="text-slate-400 hover:text-cyan-400 transition-colors text-sm font-medium px-4 py-2 rounded-lg hover:bg-slate-800/50">About</a>
+                </div>
+
+                <!-- Desktop CTA Buttons -->
                 <div class="hidden md:flex items-center space-x-3">
-                    <a href="#" class="py-2 px-2 font-medium text-gray-500 rounded hover:bg-green-500 hover:text-white transition duration-300">Log In</a>
-                    <a href="#" class="py-2 px-2 font-medium text-white bg-green-500 rounded hover:bg-green-400 transition duration-300">Sign Up</a>
+                    <a href="#" class="px-4 py-2 text-slate-300 font-medium rounded-lg hover:bg-slate-800/50 transition-all duration-300 text-sm">
+                        Sign In
+                    </a>
+                    <a href="#" class="px-4 py-2 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-semibold rounded-lg transition-all duration-300 text-sm shadow-lg shadow-cyan-500/30">
+                        Get Started
+                    </a>
                 </div>
+
+                <!-- Mobile Menu Button -->
                 <div class="md:hidden flex items-center">
-                    <button class="outline-none mobile-menu-button">
-                        <svg class="w-6 h-6 text-gray-500 hover:text-green-500"
+                    <button class="mobile-menu-button outline-none p-2 rounded-lg hover:bg-slate-800/50 transition-all">
+                        <svg class="w-6 h-6 text-slate-400 hover:text-cyan-400 transition-colors"
                             fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
                             <path d="M4 6h16M4 12h16M4 18h16"></path>
                         </svg>
                     </button>
                 </div>
             </div>
-        </div>
-        <div class="mobile-menu hidden">
-            <a href="#" class="block py-2 px-4 text-sm hover:bg-gray-200">Home</a>
-            <a href="#" class="block py-2 px-4 text-sm hover:bg-gray-200">About</a>
-            <a href="#" class="block py-2 px-4 text-sm hover:bg-gray-200">Services</a>
-            <a href="#" class="block py-2 px-4 text-sm hover:bg-gray-200">Contact</a>
+
+            <!-- Mobile Menu -->
+            <div class="mobile-menu md:hidden">
+                <div class="px-2 pt-2 pb-4 space-y-1">
+                    <a href="#" class="block px-4 py-2 text-slate-400 hover:text-cyan-400 hover:bg-slate-800/50 rounded-lg transition-all text-sm font-medium">Home</a>
+                    <a href="#" class="block px-4 py-2 text-slate-400 hover:text-cyan-400 hover:bg-slate-800/50 rounded-lg transition-all text-sm font-medium">Components</a>
+                    <a href="#" class="block px-4 py-2 text-slate-400 hover:text-cyan-400 hover:bg-slate-800/50 rounded-lg transition-all text-sm font-medium">Docs</a>
+                    <a href="#" class="block px-4 py-2 text-slate-400 hover:text-cyan-400 hover:bg-slate-800/50 rounded-lg transition-all text-sm font-medium">About</a>
+                    <div class="pt-4 border-t border-slate-700/50 space-y-2">
+                        <a href="#" class="block px-4 py-2 text-slate-300 hover:bg-slate-800/50 rounded-lg transition-all text-sm font-medium">Sign In</a>
+                        <a href="#" class="block px-4 py-2 bg-gradient-to-r from-cyan-500 to-blue-600 text-slate-950 font-semibold rounded-lg transition-all text-sm text-center">Get Started</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </nav>
 
-    <div class="max-w-7xl mx-auto py-6 px-4">
-        <h1 class="text-3xl font-bold text-gray-900">Navbar Component Demo</h1>
-        <p class="mt-2 text-gray-600">This is a responsive navbar with mobile menu toggle.</p>
+    <!-- Hero Section -->
+    <div class="pt-32 pb-20 px-6 lg:px-12">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center space-y-6">
+                <h1 class="text-5xl md:text-6xl font-black">
+                    <span class="bg-gradient-to-r from-cyan-400 via-blue-400 to-cyan-300 bg-clip-text text-transparent">
+                        Premium Navbar Component
+                    </span>
+                </h1>
+                <p class="text-lg text-slate-300 max-w-2xl mx-auto">
+                    A modern, responsive navigation bar with smooth animations and beautiful design. Perfect for any project.
+                </p>
+                <div class="flex gap-4 justify-center flex-wrap pt-4">
+                    <button class="px-8 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-bold rounded-xl transition-all duration-300 shadow-lg shadow-cyan-500/30">
+                        Explore
+                    </button>
+                    <button class="px-8 py-3 border-2 border-cyan-500/50 text-cyan-400 hover:bg-cyan-500/10 font-bold rounded-xl transition-all duration-300">
+                        Learn More
+                    </button>
+                </div>
+            </div>
+
+            <!-- Feature Grid -->
+            <div class="mt-20 grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="p-6 rounded-xl bg-slate-800/30 border border-slate-700/50 backdrop-blur-sm hover:border-cyan-500/50 transition-all">
+                    <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-cyan-500/20 to-blue-500/20 flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-cyan-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">Responsive Design</h3>
+                    <p class="text-slate-400 text-sm">Adapts beautifully to all screen sizes with mobile-first approach.</p>
+                </div>
+
+                <div class="p-6 rounded-xl bg-slate-800/30 border border-slate-700/50 backdrop-blur-sm hover:border-blue-500/50 transition-all">
+                    <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-blue-500/20 to-purple-500/20 flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">User Friendly</h3>
+                    <p class="text-slate-400 text-sm">Intuitive navigation with smooth interactions and animations.</p>
+                </div>
+
+                <div class="p-6 rounded-xl bg-slate-800/30 border border-slate-700/50 backdrop-blur-sm hover:border-purple-500/50 transition-all">
+                    <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-purple-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">Easy to Customize</h3>
+                    <p class="text-slate-400 text-sm">Fully customizable with Tailwind CSS and simple HTML structure.</p>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -66,11 +141,8 @@
             if (btn && menu) {
                 btn.addEventListener('click', function(e) {
                     e.preventDefault();
-                    menu.classList.toggle('hidden');
-                    console.log('Menu toggled');
+                    menu.classList.toggle('open');
                 });
-            } else {
-                console.error('Menu button or menu not found');
             }
         });
     </script>

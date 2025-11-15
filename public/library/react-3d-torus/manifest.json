@@ -1,0 +1,9 @@
+{
+  "name": "react-3d-torus",
+  "category": "3D Graphics",
+  "description": "Advanced React + Three.js component with animated 3D torus geometry. Demonstrates real React component integration.",
+  "tags": ["react", "threejs", "3d", "animation", "typescript"],
+  "author": "Velvron Team",
+  "languages": ["tsx", "typescript"],
+  "dependencies": ["react", "three.js"]
+}

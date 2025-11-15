@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { animate, stagger } from "animejs";
-import { Github, Globe } from 'lucide-react'
+import { Github, Globe, Grid3x3, List } from 'lucide-react'
 import ThreeScene from './ThreeScene'
 
 interface ComponentInfo {
@@ -289,11 +289,11 @@ const Home: React.FC = () => {
         animate="visible"
         className="relative pt-32 pb-40"
       >
-        <div ref={threeContainerRef} className="fixed inset-0 -z-10" />
+        <div ref={threeContainerRef} className="fixed inset-0" />
         <ThreeScene containerRef={threeContainerRef} />
 
         {/* Floating SVG shapes with anime.js */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
           <svg className="floating-shape absolute top-20 left-10 w-32 h-32 opacity-20" viewBox="0 0 100 100">
             <circle cx="50" cy="50" r="40" stroke="url(#grad1)" strokeWidth="1.5" fill="none" />
             <defs>
@@ -382,7 +382,9 @@ const Home: React.FC = () => {
             viewport={{ once: true }}
             className="flex-1 relative"
           >
+            <label htmlFor="search-components" className="sr-only">Search components</label>
             <input
+              id="search-components"
               type="text"
               placeholder="Search components..."
               value={search}
@@ -392,7 +394,7 @@ const Home: React.FC = () => {
               }}
               className="w-full px-5 py-3.5 rounded-xl bg-slate-800/40 border border-slate-700/50 text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500/50 transition-all duration-300 backdrop-blur-sm"
             />
-            <svg className="absolute right-4 top-4 w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="absolute right-4 top-4 w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
           </motion.div>
@@ -403,44 +405,52 @@ const Home: React.FC = () => {
             viewport={{ once: true }}
             className="flex gap-4"
           >
-            <select
-              value={selectedTag}
-              onChange={(e) => {
-                setSelectedTag(e.target.value)
-                setPage(1)
-              }}
-              className="px-4 py-3.5 rounded-xl bg-slate-800/40 border border-slate-700/50 text-slate-100 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 transition-all duration-300 backdrop-blur-sm font-medium"
-            >
-              <option value="">All Tags</option>
-              {allTags.map(tag => (
-                <option key={tag} value={tag}>{tag}</option>
-              ))}
-            </select>
+            <div className="flex flex-col">
+              <label htmlFor="filter-tags" className="sr-only">Filter by tags</label>
+              <select
+                id="filter-tags"
+                value={selectedTag}
+                onChange={(e) => {
+                  setSelectedTag(e.target.value)
+                  setPage(1)
+                }}
+                className="px-4 py-3.5 rounded-xl bg-slate-800/40 border border-slate-700/50 text-slate-100 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 transition-all duration-300 backdrop-blur-sm font-medium"
+              >
+                <option value="">All Tags</option>
+                {allTags.map(tag => (
+                  <option key={tag} value={tag}>{tag}</option>
+                ))}
+              </select>
+            </div>
 
             <div className="flex rounded-xl border border-slate-700/50 bg-slate-800/30 backdrop-blur-sm overflow-hidden">
               <motion.button
-                whileHover={{ scale: 1.05 }}
+                whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setViewMode('grid')}
-                className={`px-5 py-3 font-semibold transition-all ${
+                className={`px-4 py-3 transition-all ${
                   viewMode === 'grid'
                     ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-slate-950'
                     : 'text-slate-400 hover:text-slate-100'
                 }`}
+                aria-label="Grid view"
+                aria-pressed={viewMode === 'grid'}
               >
-                Grid
+                <Grid3x3 size={20} />
               </motion.button>
               <motion.button
-                whileHover={{ scale: 1.05 }}
+                whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setViewMode('list')}
-                className={`px-5 py-3 font-semibold transition-all ${
+                className={`px-4 py-3 transition-all ${
                   viewMode === 'list'
                     ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-slate-950'
                     : 'text-slate-400 hover:text-slate-100'
                 }`}
+                aria-label="List view"
+                aria-pressed={viewMode === 'list'}
               >
-                List
+                <List size={20} />
               </motion.button>
             </div>
           </motion.div>
@@ -537,13 +547,70 @@ const Home: React.FC = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="text-center"
+          className="mb-16"
         >
-          <h3 className="text-4xl font-black mb-4">About Velvron Labs</h3>
-          <p className="text-lg text-slate-300 max-w-2xl mx-auto">
-            Velvron Labs is a passionate team founded by <a href="https://elite-wednesday.vercel.app" className="text-cyan-400 hover:text-cyan-300 transition-colors">Wednesday</a>, dedicated to shipping innovative ideas and crafting cutting-edge UI components that empower developers worldwide.
-          </p>
+          <h3 className="text-5xl font-black mb-3">About Velvron</h3>
+          <div className="w-24 h-1.5 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-full" />
         </motion.div>
+
+        <div className="grid md:grid-cols-2 gap-12 items-center">
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <p className="text-lg text-slate-300 leading-relaxed mb-6">
+              Velvron is a curated collection of premium, production-ready UI components designed for modern developers. Founded by <a href="https://elite-wednesday.vercel.app" className="text-cyan-400 hover:text-cyan-300 font-semibold transition-colors">Wednesday</a>, we're on a mission to accelerate development without compromising on design quality.
+            </p>
+            <p className="text-lg text-slate-300 leading-relaxed mb-6">
+              Every component is meticulously crafted with React, Tailwind CSS, and modern web technologies. We believe in shipping fast, shipping beautiful, and shipping with confidence.
+            </p>
+            <div className="flex gap-4">
+              <motion.a
+                href="https://github.com/evilshxt/uicomponents"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="px-6 py-3 bg-slate-800/50 border border-cyan-500/50 text-cyan-400 hover:bg-cyan-500/10 rounded-lg font-semibold transition-all"
+              >
+                Star on GitHub
+              </motion.a>
+              <motion.a
+                href="https://elite-wednesday.vercel.app"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="px-6 py-3 bg-slate-800/50 border border-slate-700/50 text-slate-300 hover:border-slate-600 rounded-lg font-semibold transition-all"
+              >
+                Creator's Portfolio
+              </motion.a>
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="grid grid-cols-2 gap-4"
+          >
+            <div className="p-6 rounded-xl bg-gradient-to-br from-cyan-500/10 to-blue-500/10 border border-cyan-500/20 hover:border-cyan-500/40 transition-all">
+              <h4 className="text-2xl font-black text-cyan-400 mb-2">100+</h4>
+              <p className="text-slate-400">Components</p>
+            </div>
+            <div className="p-6 rounded-xl bg-gradient-to-br from-blue-500/10 to-purple-500/10 border border-blue-500/20 hover:border-blue-500/40 transition-all">
+              <h4 className="text-2xl font-black text-blue-400 mb-2">∞</h4>
+              <p className="text-slate-400">Customizable</p>
+            </div>
+            <div className="p-6 rounded-xl bg-gradient-to-br from-purple-500/10 to-pink-500/10 border border-purple-500/20 hover:border-purple-500/40 transition-all">
+              <h4 className="text-2xl font-black text-purple-400 mb-2">MIT</h4>
+              <p className="text-slate-400">Open Source</p>
+            </div>
+            <div className="p-6 rounded-xl bg-gradient-to-br from-pink-500/10 to-cyan-500/10 border border-pink-500/20 hover:border-pink-500/40 transition-all">
+              <h4 className="text-2xl font-black text-pink-400 mb-2">⚡</h4>
+              <p className="text-slate-400">Production Ready</p>
+            </div>
+          </motion.div>
+        </div>
       </section>
 
       {/* Footer */}

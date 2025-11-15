@@ -1,0 +1,9 @@
+{
+  "name": "3d-svg-scene",
+  "category": "3D Graphics",
+  "description": "Interactive 3D SVG scene with React and Three.js. Demonstrates sandbox system with heavy library usage.",
+  "tags": ["3d", "threejs", "react", "svg", "interactive"],
+  "author": "Velvron Team",
+  "languages": ["jsx", "javascript"],
+  "dependencies": ["react", "three.js"]
+}

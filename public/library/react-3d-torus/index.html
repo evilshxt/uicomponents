@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React 3D Torus Component</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script crossorigin src="https://unpkg.com/react@19/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@19/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body class="bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 min-h-screen p-6">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+
+        // React 3D Torus Component
+        const React3DTorus = () => {
+            const containerRef = useRef(null);
+            const sceneRef = useRef(null);
+            const torusRef = useRef(null);
+            const [isAnimating, setIsAnimating] = useState(true);
+            const [speed, setSpeed] = useState(0.01);
+            const [scale, setScale] = useState(1);
+            const [color, setColor] = useState('#06b6d4');
+
+            useEffect(() => {
+                if (!containerRef.current) return;
+
+                // Scene setup
+                const scene = new THREE.Scene();
+                const camera = new THREE.PerspectiveCamera(
+                    75,
+                    containerRef.current.clientWidth / containerRef.current.clientHeight,
+                    0.1,
+                    1000
+                );
+                const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+
+                renderer.setSize(containerRef.current.clientWidth, containerRef.current.clientHeight);
+                renderer.setPixelRatio(window.devicePixelRatio);
+                renderer.setClearColor(0x0f172a, 0.1);
+                containerRef.current.appendChild(renderer.domElement);
+
+                camera.position.z = 5;
+
+                // Lighting
+                const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+                scene.add(ambientLight);
+
+                const directionalLight = new THREE.DirectionalLight(0x06b6d4, 0.8);
+                directionalLight.position.set(5, 5, 5);
+                scene.add(directionalLight);
+
+                // Create Torus
+                const geometry = new THREE.TorusGeometry(2, 0.8, 32, 100);
+                const material = new THREE.MeshStandardMaterial({
+                    color: color,
+                    metalness: 0.8,
+                    roughness: 0.2,
+                    emissive: color,
+                    emissiveIntensity: 0.5
+                });
+                const torus = new THREE.Mesh(geometry, material);
+                scene.add(torus);
+                torusRef.current = { torus, material };
+                sceneRef.current = { scene, camera, renderer };
+
+                // Animation loop
+                let animationId;
+                const animate = () => {
+                    animationId = requestAnimationFrame(animate);
+
+                    if (isAnimating && torusRef.current) {
+                        torusRef.current.torus.rotation.x += speed;
+                        torusRef.current.torus.rotation.y += speed * 0.7;
+                    }
+
+                    renderer.render(scene, camera);
+                };
+                animate();
+
+                // Handle resize
+                const handleResize = () => {
+                    const width = containerRef.current.clientWidth;
+                    const height = containerRef.current.clientHeight;
+                    camera.aspect = width / height;
+                    camera.updateProjectionMatrix();
+                    renderer.setSize(width, height);
+                };
+
+                window.addEventListener('resize', handleResize);
+
+                return () => {
+                    window.removeEventListener('resize', handleResize);
+                    cancelAnimationFrame(animationId);
+                };
+            }, [isAnimating, speed]);
+
+            // Update color
+            useEffect(() => {
+                if (torusRef.current) {
+                    torusRef.current.material.color.setStyle(color);
+                    torusRef.current.material.emissive.setStyle(color);
+                }
+            }, [color]);
+
+            // Update scale
+            useEffect(() => {
+                if (torusRef.current) {
+                    torusRef.current.torus.scale.set(scale, scale, scale);
+                }
+            }, [scale]);
+
+            return (
+                <div className="max-w-6xl mx-auto">
+                    <div className="text-center mb-8">
+                        <h1 className="text-4xl font-black mb-2 bg-gradient-to-r from-cyan-400 via-blue-400 to-cyan-300 bg-clip-text text-transparent">
+                            React 3D Torus
+                        </h1>
+                        <p className="text-slate-400">Advanced React + Three.js Component</p>
+                    </div>
+
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        {/* Canvas */}
+                        <div className="lg:col-span-2">
+                            <div
+                                ref={containerRef}
+                                className="w-full h-96 rounded-2xl overflow-hidden border border-slate-700/50 bg-slate-900/50 shadow-2xl shadow-cyan-500/20"
+                            />
+                        </div>
+
+                        {/* Controls */}
+                        <div className="space-y-4">
+                            <div className="p-6 rounded-2xl bg-slate-800/30 border border-slate-700/50 backdrop-blur-sm">
+                                <h2 className="text-lg font-bold text-white mb-4">Controls</h2>
+
+                                <div className="space-y-4">
+                                    <div>
+                                        <label className="text-sm font-semibold text-slate-300 block mb-2">
+                                            Speed: {speed.toFixed(3)}
+                                        </label>
+                                        <input
+                                            type="range"
+                                            min="0"
+                                            max="0.1"
+                                            step="0.005"
+                                            value={speed}
+                                            onChange={(e) => setSpeed(parseFloat(e.target.value))}
+                                            className="w-full"
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <label className="text-sm font-semibold text-slate-300 block mb-2">
+                                            Scale: {scale.toFixed(1)}x
+                                        </label>
+                                        <input
+                                            type="range"
+                                            min="0.5"
+                                            max="2"
+                                            step="0.1"
+                                            value={scale}
+                                            onChange={(e) => setScale(parseFloat(e.target.value))}
+                                            className="w-full"
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <label className="text-sm font-semibold text-slate-300 block mb-2">
+                                            Color
+                                        </label>
+                                        <input
+                                            type="color"
+                                            value={color}
+                                            onChange={(e) => setColor(e.target.value)}
+                                            className="w-full h-10 rounded-lg cursor-pointer"
+                                        />
+                                    </div>
+
+                                    <button
+                                        onClick={() => setIsAnimating(!isAnimating)}
+                                        className="w-full px-4 py-2 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-semibold rounded-lg transition-all duration-300 text-sm"
+                                    >
+                                        {isAnimating ? 'Pause' : 'Resume'}
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div className="p-6 rounded-2xl bg-slate-800/30 border border-slate-700/50 backdrop-blur-sm">
+                                <h2 className="text-lg font-bold text-white mb-3">Info</h2>
+                                <div className="space-y-2 text-sm text-slate-400">
+                                    <p><span className="text-cyan-400">Type:</span> React Component</p>
+                                    <p><span className="text-cyan-400">Library:</span> Three.js</p>
+                                    <p><span className="text-cyan-400">Geometry:</span> Torus</p>
+                                    <p><span className="text-cyan-400">Status:</span> <span className="text-green-400">Running</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Features */}
+                    <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div className="p-6 rounded-xl bg-slate-800/30 border border-slate-700/50 backdrop-blur-sm">
+                            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-cyan-500/20 to-blue-500/20 flex items-center justify-center mb-3">
+                                <svg className="w-6 h-6 text-cyan-400" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fillRule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd"></path>
+                                </svg>
+                            </div>
+                            <h3 className="text-white font-bold mb-2">React Powered</h3>
+                            <p className="text-slate-400 text-sm">Built with React hooks for state management and real-time updates.</p>
+                        </div>
+
+                        <div className="p-6 rounded-xl bg-slate-800/30 border border-slate-700/50 backdrop-blur-sm">
+                            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500/20 to-purple-500/20 flex items-center justify-center mb-3">
+                                <svg className="w-6 h-6 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M11 3a1 1 0 10-2 0v1a1 1 0 102 0V3zM15.657 5.757a1 1 0 00-1.414-1.414l-.707.707a1 1 0 001.414 1.414l.707-.707zM18 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM15.657 14.243a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414l.707.707zM11 17a1 1 0 102 0v-1a1 1 0 10-2 0v1zM5.757 15.657a1 1 0 00-1.414-1.414l-.707.707a1 1 0 001.414 1.414l.707-.707zM3 10a1 1 0 01 1 1h1a1 1 0 110-2H4a1 1 0 00-1 1zM5.757 5.757a1 1 0 000-1.414L5.05 3.636a1 1 0 10-1.414 1.414l.707.707z"></path>
+                                </svg>
+                            </div>
+                            <h3 className="text-white font-bold mb-2">Real-time Controls</h3>
+                            <p className="text-slate-400 text-sm">Adjust speed, scale, and color with instant visual feedback.</p>
+                        </div>
+
+                        <div className="p-6 rounded-xl bg-slate-800/30 border border-slate-700/50 backdrop-blur-sm">
+                            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center mb-3">
+                                <svg className="w-6 h-6 text-purple-400" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fillRule="evenodd" d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd"></path>
+                                </svg>
+                            </div>
+                            <h3 className="text-white font-bold mb-2">Advanced 3D</h3>
+                            <p className="text-slate-400 text-sm">Uses Three.js for high-performance 3D rendering and lighting.</p>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        // Render
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<React3DTorus />);
+    </script>
+</body>
+</html>

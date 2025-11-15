@@ -1,4 +1,6 @@
 [
+  "3d-svg-scene",
   "card",
-  "navbar"
+  "navbar",
+  "react-3d-torus"
 ]

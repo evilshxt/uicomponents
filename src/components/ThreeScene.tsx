@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import * as THREE from 'three'
 
 interface ThreeSceneProps {
@@ -6,8 +6,14 @@ interface ThreeSceneProps {
 }
 
 const ThreeScene: React.FC<ThreeSceneProps> = ({ containerRef }) => {
+  const sceneRef = useRef<{ scene: THREE.Scene; camera: THREE.PerspectiveCamera; renderer: THREE.WebGLRenderer; animationId: number } | null>(null)
+  const initializedRef = useRef(false)
+
   useEffect(() => {
     if (!containerRef.current) return
+    if (initializedRef.current) return // Already initialized
+
+    initializedRef.current = true
 
     const w = window.innerWidth
     const h = window.innerHeight
@@ -18,9 +24,11 @@ const ThreeScene: React.FC<ThreeSceneProps> = ({ containerRef }) => {
 
     renderer.setSize(w, h)
     renderer.setPixelRatio(window.devicePixelRatio)
-    renderer.domElement.style.position = 'absolute'
+    renderer.domElement.style.position = 'fixed'
     renderer.domElement.style.top = '0'
     renderer.domElement.style.left = '0'
+    renderer.domElement.style.zIndex = '0'
+    renderer.domElement.style.pointerEvents = 'none'
     containerRef.current.appendChild(renderer.domElement)
 
     camera.position.z = 15
@@ -142,7 +150,7 @@ const ThreeScene: React.FC<ThreeSceneProps> = ({ containerRef }) => {
     }
 
     // Animation Loop
-    let animationId: number
+    let animationId = 0
     const animate = () => {
       animationId = requestAnimationFrame(animate)
 
@@ -183,6 +191,9 @@ const ThreeScene: React.FC<ThreeSceneProps> = ({ containerRef }) => {
     }
     animate()
 
+    // Store in ref to prevent re-initialization
+    sceneRef.current = { scene, camera, renderer, animationId }
+
     // Responsive resize handler
     const handleResize = () => {
       const newW = window.innerWidth
@@ -194,38 +205,6 @@ const ThreeScene: React.FC<ThreeSceneProps> = ({ containerRef }) => {
     }
 
     window.addEventListener('resize', handleResize)
-
-    // Cleanup
-    return () => {
-      window.removeEventListener('resize', handleResize)
-      cancelAnimationFrame(animationId)
-      renderer.dispose()
-
-      // Dispose of geometries and materials
-      mainGearGeometry.dispose()
-      if (mainGear.material instanceof THREE.Material) mainGear.material.dispose()
-      if (mainGearEdges.material instanceof THREE.Material) mainGearEdges.material.dispose()
-      gears.forEach(gear => {
-        gear.geometry.dispose()
-        if (gear.material instanceof THREE.Material) gear.material.dispose()
-      })
-      gearEdges.forEach(edge => {
-        edge.geometry.dispose()
-        if (edge.material instanceof THREE.Material) edge.material.dispose()
-      })
-      crystals.forEach(crystal => {
-        crystal.geometry.dispose()
-        if (crystal.material instanceof THREE.Material) crystal.material.dispose()
-      })
-      crystalEdges.forEach(edge => {
-        edge.geometry.dispose()
-        if (edge.material instanceof THREE.Material) edge.material.dispose()
-      })
-
-      if (containerRef.current?.contains(renderer.domElement)) {
-        containerRef.current.removeChild(renderer.domElement)
-      }
-    }
   }, [])
 
   return null

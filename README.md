@@ -380,7 +380,7 @@ See the [LICENSE](LICENSE) file for full details.
 **Velvron Team** - Creating beautiful, production-ready UI components.
 
 ```
-Made with ❤️ for developers who care about design
+Made with ❤️ by Velvron Labs for developers who care about design
 ```
 
 ---
